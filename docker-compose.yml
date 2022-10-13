@@ -1,0 +1,61 @@
+version: "3.9"
+
+services:
+  database:
+    build:
+      context: ./
+      dockerfile: Dockerfiles/postgis.Dockerfile
+    env_file:
+      - .env
+    networks:
+      - ccre_net
+    ports:
+      - "5432:5432"
+    volumes:
+      - ccre_db:/var/lib/postgresql/data/
+    healthcheck:
+      test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB}", "-U", "${POSTGRES_USER}"]
+      interval: 5s
+      retries: 5
+    restart: always
+
+  db_admin:
+    build:
+      context: ./
+      dockerfile: ./Dockerfiles/pgadmin4.Dockerfile
+    env_file:
+      - .env
+    restart: always
+    depends_on:
+      - database
+    networks:
+      - ccre_net
+    ports:
+      - "5678:80"
+    volumes:
+      - ccre_db_admin:/var/lib/pgadmin
+
+  orion:
+    build:
+      context: ./
+      dockerfile: Dockerfiles/prefect.Dockerfile
+    env_file:
+      - .env
+    restart: always
+    volumes:
+      - ccre_prefect:/root/.prefect
+    entrypoint: ["prefect", "orion", "start"]
+    networks:
+      - ccre_net
+    ports:
+      - "4200:4200"
+    depends_on:
+      - database
+
+networks:
+  ccre_net:
+
+volumes:
+  ccre_db:
+  ccre_db_admin:
+  ccre_prefect:
