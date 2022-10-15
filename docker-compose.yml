@@ -52,6 +52,22 @@ services:
     depends_on:
       - database
 
+  prefect_cli:
+    build:
+      context: ./
+      dockerfile: Dockerfiles/prefect.Dockerfile
+    env_file:
+      - .env
+    entrypoint: "bash"
+    working_dir: "/root/flows"
+    volumes:
+      - "./flows:/root/flows"
+    environment:
+      - PREFECT_API_URL=http://orion:4200/api
+    networks:
+      - ccre_net
+    profiles: ["prefect_cli"]
+
 networks:
   ccre_net:
 

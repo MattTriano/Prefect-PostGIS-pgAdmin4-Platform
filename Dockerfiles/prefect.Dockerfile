@@ -1,1 +1,1 @@
-FROM prefecthq/prefect:2.6.0-python3.10
+FROM prefecthq/prefect:2.6.1-python3.10

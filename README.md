@@ -29,10 +29,29 @@ $ docker-compose down -v
 Then you'll be able to connect to the database via port 5432 (or whatever port you set as the database-host port in the `docker-compose.yml` file) and access the admin portal at http://0.0.0.0:5678 (or whatever port you set as the admin-host port in the `docker-compose.yml` file).
 
 
-## Accessing the Prefect UI
+## Accessing the Prefect CLI
+
+Via a terminal in the working dir containing this README, use the command below to run the `prefect_cli` service
+
+```bash
+$ docker-compose run prefect_cli
+```
+
+This should give you a bash shell in the `~/flows` directory in the prefect container, and you can run flows via 
+
+```bash
+user@host:~/flows# python <flow_name>.py
+```
+
+## Accessing the Prefect Web UI
 
 If the server is running and the setup ran without throwing errors, you can access the Prefect UI at [http://0.0.0.0:4200/](http://0.0.0.0:4200/) (if you used a different port number, swap that in place of the 4200).
 
 ## Accessing the pgAdmin4 Admin UI
 
 Access the interface at [http://0.0.0.0:5678/](http://0.0.0.0:5678/) and enter the credentials defined in the `.env` file that start with PGADMIN_...
+
+
+# Referenced Material:
+
+* [rpden's docker-compose prefect repo](https://github.com/rpeden/prefect-docker-compose)
